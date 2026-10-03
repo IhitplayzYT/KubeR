@@ -1,8 +1,5 @@
 pub mod Helper{
     use std::process::exit;
-
-
-
     const DBG_STR: &str = "";
     const OK:i32 = 0;
     const ERR:i32 = -1;
@@ -39,8 +36,6 @@ pub mod Helper{
 
 
         }
-
-
 
     }
 
