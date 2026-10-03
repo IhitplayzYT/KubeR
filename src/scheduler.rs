@@ -26,15 +26,15 @@ impl Scheduler {
 
         let (mut req_cpu,mut req_mem) = (0u64,0u64);
         for cont in &pod.spec.containers {
-            req_cpu += cont.resources.cpu_millis;
-            req_mem += cont.resources.memory_bytes;
+            req_cpu += cont.resources.cpu_t;
+            req_mem += cont.resources.mem;
         }
 
         for node in &availib_nd {
-            if node.allocatable.cpu_millis >= req_cpu && node.allocatable.memory_bytes >= req_mem {
+            if node.availib.cpu_t >= req_cpu && node.availib.mem >= req_mem {
                 return Ok(Some(node.id.clone()));
             }
         }
-        Err(SchedulerError::InsufficientResources("any".to_string()))
+        Err(SchedulerError::InsufficientResources(format!("No node has required resources for allocating pod: {}",pod.id)))
     }
 }

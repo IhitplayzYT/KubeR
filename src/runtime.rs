@@ -1,7 +1,5 @@
 use crate::models::{ContainerSpec, ContainerStatus, PodStatus, PodId};
 use std::collections::HashMap;
-use std::fs;
-use std::io::Read;
 use std::process::Child;
 use std::sync::Arc;
 use tokio::sync::Mutex;
@@ -76,10 +74,10 @@ impl ProcessRuntime {
         for (name, info) in container_map {
             let ready =  info.child.lock().await.is_some();
             let exit_code = * info.exit_code.lock().await;
-            status.push(ContainerStatus {name: name.clone(),ready,exit_code: exit_code.unwrap_or(0),message: if ready {"Running".to_string()} else if let Some(code) = exit_code {format!("Exited {}", code)} else {"Stopped".to_string()}});
+            status.push(ContainerStatus {name: name.clone(),ready,ecode: exit_code.unwrap_or(0),mssg: if ready {"Running".to_string()} else if let Some(code) = exit_code {format!("Exited {}", code)} else {"Stopped".to_string()}});
         }
 
-        Ok(PodStatus {pod_id: pod_id.to_string(),message: "Pod status".to_string(),container_statuses:status})
+        Ok(PodStatus {pod_id: pod_id.to_string(),mssg: "Pod status".to_string(),container_statuses:status})
     }
 
     pub async fn get_pod_logs(&self, pod_id: &str, container_name: &str) -> Result<Vec<String>> {
