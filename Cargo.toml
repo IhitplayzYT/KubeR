@@ -1,9 +1,19 @@
 [package]
-name = "KubeR"
-description = ""
+name = "kuber"
 version = "0.1.0"
-edition = "2024"
-license = "GPL-3.0-only"
-license-file = "LICENSE"
+edition = "2021"
 
 [dependencies]
+tonic = "0.11"
+prost = "0.12"
+tokio = { version = "1.35", features = ["full"] }
+sqlx = { version = "0.7", features = ["runtime-tokio", "mysql", "chrono"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = "0.4"
+thiserror = "1.0"
+uuid = { version = "1.6", features = ["v4", "serde"] }
+
+// For auto build of protobufs using tonic
+[build-dependencies]
+tonic-build = "0.11"
