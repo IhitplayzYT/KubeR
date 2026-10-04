@@ -3,13 +3,13 @@ syntax = "proto3";
 package cluster;
 
 service ClusterApi {
-    rpc CreatePod(CreatePodRequest) returns (CreatePodResponse);
-    rpc GetPod(GetPodRequest) returns (Pod);
-    rpc DeletePod(DeletePodRequest) returns (DeletePodResponse);
+    rpc CreatePod(CreatePodRequest) returns (PodId);
+    rpc GetPod(PodId) returns (Pod);
+    rpc DeletePod(PodId) returns (DeletePodResponse);
     rpc ListPods(ListPodsRequest) returns (ListPodsResponse);
-    rpc RegisterNode(RegisterNodeRequest) returns (RegisterNodeResponse);
+    rpc RegisterNode(RegisterNodeRequest) returns (NodeId);
     rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);
-    rpc GetNode(GetNodeRequest) returns (Node);
+    rpc GetNode(NodeId) returns (Node);
     rpc ListNodes(ListNodesRequest) returns (ListNodesResponse);
     rpc ReportPodStatus(PodStatus) returns (Ack);
 }
@@ -20,15 +20,7 @@ message CreatePodRequest {
     repeated ContainerSpec containers = 3;
 }
 
-message CreatePodResponse {
-    string pod_id = 1;
-}
-
-message GetPodRequest {
-    string pod_id = 1;
-}
-
-message DeletePodRequest {
+message PodId{
     string pod_id = 1;
 }
 
@@ -45,27 +37,25 @@ message ListPodsResponse {
 }
 
 message RegisterNodeRequest {
-    string address = 1;
-    uint64 cpu_millis = 2;
-    uint64 memory_bytes = 3;
+    string addr = 1;
+    uint64 cpu_t = 2;
+    uint64 mem = 3;
     map<string, string> labels = 4;
 }
 
-message RegisterNodeResponse {
-    string node_id = 1;
-}
+
 
 message HeartbeatRequest {
     string node_id = 1;
-    uint64 cpu_millis = 2;
-    uint64 memory_bytes = 3;
+    uint64 cpu_t = 2;
+    uint64 mem = 3;
 }
 
 message HeartbeatResponse {
     bool accepted = 1;
 }
 
-message GetNodeRequest {
+message NodeId{
     string node_id = 1;
 }
 
@@ -98,35 +88,35 @@ message ContainerSpec {
     string image = 2;
     repeated string command = 3;
     repeated string args = 4;
-    uint64 cpu_millis = 5;
-    uint64 memory_bytes = 6;
+    uint64 cpu_t = 5;
+    uint64 mem = 6;
 }
 
 message PodStatus {
     string pod_id = 1;
     string phase = 2;
-    string message = 3;
-    repeated ContainerStatus container_statuses = 4;
+    string mssg = 3;
+    repeated ContainerStatus statuses = 4;
 }
 
 message ContainerStatus {
     string name = 1;
     bool ready = 2;
-    int32 exit_code = 3;
-    string message = 4;
+    int32 ecode = 3;
+    string mssg = 4;
 }
 
 message Node {
     string id = 1;
-    string address = 2;
-    Resources capacity = 3;
-    Resources allocatable = 4;
+    string addr = 2;
+    Resources cap = 3;
+    Resources availib = 4;
     string status = 5;
     map<string, string> labels = 6;
-    int64 last_heartbeat = 7;
+    int64 last_ping = 7;
 }
 
 message Resources {
-    uint64 cpu_millis = 1;
-    uint64 memory_bytes = 2;
+    uint64 cpu_t = 1;
+    uint64 mem = 2;
 }

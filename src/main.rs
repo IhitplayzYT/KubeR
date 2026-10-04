@@ -4,7 +4,6 @@ mod models;
 mod runtime;
 mod scheduler;
 mod helper;
-
 pub mod cluster {
     tonic::include_proto!("cluster");
 }

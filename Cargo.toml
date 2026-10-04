@@ -14,6 +14,5 @@ chrono = "0.4"
 thiserror = "1.0"
 uuid = { version = "1.6", features = ["v4", "serde"] }
 
-// For auto build of protobufs using tonic
 [build-dependencies]
 tonic-build = "0.11"

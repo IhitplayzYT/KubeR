@@ -1,4 +1,4 @@
-use crate::models::{Node, NodeId, NodeStatus, Pod, PodId, PodPhase, PodSpec, Resources};
+use crate::models::{Node, NodeId, NodeStatus, Pod, PodId, PodPhase, PodSpec, PodStatus, Resources};
 use sqlx::{MySql, Pool, mysql::MySqlPoolOptions};
 use thiserror::Error;
 
@@ -135,7 +135,6 @@ impl StateStore {
             }).collect();
         Ok(pods)
     }
-
     pub async fn list_pods_by_namespace(&self, namespace: &str) -> Result<Vec<Pod>> {
         let rows = sqlx::query_as::<_, (String, String, String, String, String, String, Option<String>)>("SELECT id, name, namespace, spec, status, phase, node_id FROM pods WHERE namespace = ?").bind(namespace).fetch_all(&self.pool).await?;
         let pods = rows.into_iter().map(|(id, name, namespace, spec_json, status_json, phase, node_id)| {
